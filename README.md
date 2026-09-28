@@ -37,8 +37,7 @@ Nový účet jde založit i přes "Zaregistruj se".
 - `icons/` - ikony appky
 
 JavaScript logika je rozdělená do víc menších souborů podle toho, co
-dělají (žádný z nich nemá přes 160 řádků), aby se v tom dalo rychle
-najít, co člověk zrovna hledá:
+dělají.
 
 - `data.js` - ukládání do localStorage, hash hesla, pomocné funkce
 - `ucet.js` - přihlášení, registrace, odhlášení
@@ -49,8 +48,6 @@ najít, co člověk zrovna hledá:
 - `nastaveni.js` - profil, změna hesla, název webu
 - `nahled.js` - náhled stránky/příspěvku
 
-Viz taky `OBHAJOBA.md` - tahák s tím, kde přesně najít odpověď na
-typické otázky u obhajoby.
 
 ## Jak appka funguje (stručně)
 
