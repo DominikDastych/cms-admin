@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administrace webu</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== PŘIHLÁŠENÍ / REGISTRACE ===================== -->
+<div id="loginBox">
+  <h1>Administrace webu</h1>
+
+  <div id="loginForm">
+    <h2>Přihlášení</h2>
+    <label>Uživatelské jméno</label>
+    <input type="text" id="loginUsername">
+    <label>Heslo</label>
+    <input type="password" id="loginPassword">
+    <p id="loginChyba" class="chyba"></p>
+    <button onclick="prihlasit()">Přihlásit se</button>
+    <p class="mala-poznamka">Zkušební účet: admin / admin123</p>
+    <p>Nemáš účet? <a href="#" onclick="prepniNaRegistraci()">Zaregistruj se</a></p>
+  </div>
+
+  <div id="registerForm" class="skryto">
+    <h2>Registrace</h2>
+    <label>Jméno (jak se má zobrazovat)</label>
+    <input type="text" id="regJmeno">
+    <label>Uživatelské jméno</label>
+    <input type="text" id="regUsername">
+    <label>Heslo</label>
+    <input type="password" id="regPassword">
+    <p id="regChyba" class="chyba"></p>
+    <button onclick="registrovat()">Vytvořit účet</button>
+    <p>Už máš účet? <a href="#" onclick="prepniNaPrihlaseni()">Přihlas se</a></p>
+  </div>
+
+  <p id="offlineInfo" class="offline-info skryto">Nejsi připojený/á k internetu, ale aplikace pořád funguje, data zůstávají uložená v tomto prohlížeči.</p>
+</div>
+
+<!-- ===================== ADMINISTRACE (po přihlášení) ===================== -->
+<div id="appBox" class="skryto">
+
+  <header id="hlavicka">
+    <h1>Administrace webu</h1>
+    <p>Přihlášen/a jako <strong id="jmenoUzivatele"></strong> — <a href="#" onclick="odhlasit()">odhlásit se</a></p>
+  </header>
+
+  <nav id="menu">
+    <button onclick="zobrazSekci('prehled')" id="menu-prehled">Přehled</button>
+    <button onclick="zobrazSekci('stranky')" id="menu-stranky">Stránky</button>
+    <button onclick="zobrazSekci('prispevky')" id="menu-prispevky">Příspěvky</button>
+    <button onclick="zobrazSekci('kategorie')" id="menu-kategorie">Kategorie</button>
+    <button onclick="zobrazSekci('nastaveni')" id="menu-nastaveni">Nastavení</button>
+  </nav>
+
+  <main>
+
+    <!-- PŘEHLED -->
+    <section id="sekce-prehled" class="sekce">
+      <h2>Přehled</h2>
+      <div id="prehledStaty" class="staty"></div>
+    </section>
+
+    <!-- STRÁNKY -->
+    <section id="sekce-stranky" class="sekce skryto">
+      <h2>Stránky</h2>
+      <button onclick="novaStranka()">+ Přidat stránku</button>
+
+      <div class="karta">
+        <table>
+          <thead>
+            <tr><th>Titulek</th><th>Stav</th><th>Upraveno</th><th>Akce</th></tr>
+          </thead>
+          <tbody id="tabulkaStranky"></tbody>
+        </table>
+      </div>
+
+      <div id="formStranky" class="formular skryto">
+        <h3 id="formStrankyNadpis">Nová stránka</h3>
+        <input type="hidden" id="strankaId">
+        <label>Titulek</label>
+        <input type="text" id="strankaTitulek">
+        <label>Obsah</label>
+        <textarea id="strankaObsah" rows="6"></textarea>
+        <label>Stav</label>
+        <select id="strankaStav">
+          <option value="koncept">Koncept</option>
+          <option value="publikovano">Publikováno</option>
+        </select>
+        <p id="strankaChyba" class="chyba"></p>
+        <button onclick="ulozitStranku()">Uložit</button>
+        <button onclick="zrusitFormStranky()">Zrušit</button>
+      </div>
+    </section>
+
+    <!-- PŘÍSPĚVKY -->
+    <section id="sekce-prispevky" class="sekce skryto">
+      <h2>Příspěvky</h2>
+      <button onclick="novyPrispevek()">+ Přidat příspěvek</button>
+
+      <div class="karta">
+        <table>
+          <thead>
+            <tr><th>Titulek</th><th>Kategorie</th><th>Stav</th><th>Upraveno</th><th>Akce</th></tr>
+          </thead>
+          <tbody id="tabulkaPrispevky"></tbody>
+        </table>
+      </div>
+
+      <div id="formPrispevky" class="formular skryto">
+        <h3 id="formPrispevkyNadpis">Nový příspěvek</h3>
+        <input type="hidden" id="prispevekId">
+        <label>Titulek</label>
+        <input type="text" id="prispevekTitulek">
+        <label>Kategorie</label>
+        <select id="prispevekKategorie"></select>
+        <label>Obsah</label>
+        <textarea id="prispevekObsah" rows="6"></textarea>
+        <label>Stav</label>
+        <select id="prispevekStav">
+          <option value="koncept">Koncept</option>
+          <option value="publikovano">Publikováno</option>
+        </select>
+        <p id="prispevekChyba" class="chyba"></p>
+        <button onclick="ulozitPrispevek()">Uložit</button>
+        <button onclick="zrusitFormPrispevky()">Zrušit</button>
+      </div>
+    </section>
+
+    <!-- KATEGORIE -->
+    <section id="sekce-kategorie" class="sekce skryto">
+      <h2>Kategorie</h2>
+      <button onclick="novaKategorie()">+ Přidat kategorii</button>
+
+      <div class="karta">
+        <table>
+          <thead>
+            <tr><th>Název</th><th>Popis</th><th>Počet příspěvků</th><th>Akce</th></tr>
+          </thead>
+          <tbody id="tabulkaKategorie"></tbody>
+        </table>
+      </div>
+
+      <div id="formKategorie" class="formular skryto">
+        <h3 id="formKategorieNadpis">Nová kategorie</h3>
+        <input type="hidden" id="kategorieId">
+        <label>Název</label>
+        <input type="text" id="kategorieNazev">
+        <label>Popis</label>
+        <input type="text" id="kategoriePopis">
+        <p id="kategorieChyba" class="chyba"></p>
+        <button onclick="ulozitKategorii()">Uložit</button>
+        <button onclick="zrusitFormKategorie()">Zrušit</button>
+      </div>
+    </section>
+
+    <!-- NASTAVENÍ -->
+    <section id="sekce-nastaveni" class="sekce skryto">
+      <h2>Nastavení</h2>
+
+      <div class="formular">
+        <h3>Můj profil</h3>
+        <label>Zobrazované jméno</label>
+        <input type="text" id="nastaveniJmeno">
+        <button onclick="ulozitProfil()">Uložit jméno</button>
+      </div>
+
+      <div class="formular">
+        <h3>Změna hesla</h3>
+        <label>Současné heslo</label>
+        <input type="password" id="nastaveniStareHeslo">
+        <label>Nové heslo</label>
+        <input type="password" id="nastaveniNoveHeslo">
+        <p id="nastaveniChyba" class="chyba"></p>
+        <button onclick="zmenitHeslo()">Změnit heslo</button>
+      </div>
+
+      <div class="formular">
+        <h3>Název webu</h3>
+        <label>Zobrazí se v náhledu stránek</label>
+        <input type="text" id="nastaveniNazevWebu">
+        <button onclick="ulozitNazevWebu()">Uložit</button>
+      </div>
+    </section>
+
+    <!-- NÁHLED -->
+    <section id="sekce-nahled" class="sekce skryto">
+      <h2>Náhled</h2>
+      <button onclick="zavritNahled()">&larr; Zpět</button>
+      <div id="nahledBox" class="nahled-box"></div>
+    </section>
+
+  </main>
+
+  <p id="hlaskaBox" class="hlaska skryto"></p>
+</div>
+
+<script src="data.js"></script>
+<script src="ucet.js"></script>
+<script src="hlavni.js"></script>
+<script src="stranky.js"></script>
+<script src="prispevky.js"></script>
+<script src="kategorie.js"></script>
+<script src="nastaveni.js"></script>
+<script src="nahled.js"></script>
+</body>
+</html>
